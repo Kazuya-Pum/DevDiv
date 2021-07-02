@@ -71,13 +71,20 @@ def get_file_words(path, url, extension, save_path):
         with open(filepath, 'wb') as f:
             f.write(res.content)
         if extension == '.js':
-            from astword.js import get_words
+            from astword.js.processor import get_words
+        elif extension == '.py':
+            from astword.py.processor import get_words
+        elif extension == '.java':
+            from astword.java.processor import get_words
 
         words = get_words(filepath)
         return words
     
+    except Exception as e:
+        print(e)
     finally:
         os.remove(filepath)
+        pass
 
 
 def get_repo_words(owner, repo, extension):
@@ -95,3 +102,5 @@ def get_repo_words(owner, repo, extension):
 
     finally:
         shutil.rmtree(save_path)
+        pass
+

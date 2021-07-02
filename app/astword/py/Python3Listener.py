@@ -1,4 +1,4 @@
-# Generated from app/astword/py/Python3Parser.g4 by ANTLR 4.9.2
+# Generated from Python3.g4 by ANTLR 4.9.2
 from antlr4 import *
 if __name__ is not None and "." in __name__:
     from .Python3Parser import Python3Parser
@@ -6,7 +6,7 @@ else:
     from Python3Parser import Python3Parser
 
 # This class defines a complete listener for a parse tree produced by Python3Parser.
-class Python3ParserListener(ParseTreeListener):
+class Python3Listener(ParseTreeListener):
 
     # Enter a parse tree produced by Python3Parser#single_input.
     def enterSingle_input(self, ctx:Python3Parser.Single_inputContext):
@@ -656,12 +656,12 @@ class Python3ParserListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by Python3Parser#subscript_.
-    def enterSubscript_(self, ctx:Python3Parser.Subscript_Context):
+    # Enter a parse tree produced by Python3Parser#subscript.
+    def enterSubscript(self, ctx:Python3Parser.SubscriptContext):
         pass
 
-    # Exit a parse tree produced by Python3Parser#subscript_.
-    def exitSubscript_(self, ctx:Python3Parser.Subscript_Context):
+    # Exit a parse tree produced by Python3Parser#subscript.
+    def exitSubscript(self, ctx:Python3Parser.SubscriptContext):
         pass
 
 
