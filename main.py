@@ -1,8 +1,8 @@
 from system import system
-from flask import Flask, request
+from flask import Flask, request, send_file, make_response
 from wordcloud import WordCloud
 import json
-import os
+from io import BytesIO
 
 
 app = Flask(__name__)
@@ -20,7 +20,10 @@ def divination():
 	repo = body['repo']
 	extension = body['extension']
 
-	return (system.execute(owner, repo, extension), 200, {"Access-Control-Allow-Origin": "*"})
+	res = make_response(system.execute(owner, repo, extension))
+	res.headers['Access-Control-Allow-Origin'] = '*'
+
+	return res
 
 
 @app.route('/makeimage', methods=['POST'])
@@ -29,7 +32,10 @@ def makeimage():
 	text = body['text']
 
 	output_image = WordCloud(background_color="white", width=900, height=500).generate(text)
-	output_image.to_file("/Users/kazuya/GitHub/DevDiv/wordcloud_sample.png")
-	return 0
 
-app.run(debug=True)
+	img = BytesIO()
+	output_image.to_image().save(img, 'PNG')
+	img.seek(0)
+	return send_file(img, mimetype='image/png')
+
+app.run(debug=False)
