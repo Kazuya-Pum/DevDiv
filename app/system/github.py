@@ -12,6 +12,15 @@ access_token = os.environ.get('TOKEN')
 headers = {'Authorization': f'token {access_token}'} if access_token != None else None
 
 
+class Repository():
+    def __init__(self, owner, repo, extension):
+        self.owner = owner
+        self.repo = repo
+        self.extension = extension
+        self.raw_words = get_repo_words(owner, repo, extension)
+        self.words = separate_words(self.raw_words)
+
+
 def get_sha(owner, repo):
     url = f'https://api.github.com/repos/{owner}/{repo}'
     res = requests.get(url, headers=headers)
@@ -98,7 +107,7 @@ def get_repo_words(owner, repo, extension):
         for path, url in urls.items():
             words.extend(get_file_words(path, url, extension, save_path))
 
-        return separate_words(words)
+        return words
 
     finally:
         shutil.rmtree(save_path)
