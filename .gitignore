@@ -133,3 +133,5 @@ app/system/model/*.bin
 app/system/model/*.kv
 app/system/model/*.npy
 .vscode/
+
+env.yaml

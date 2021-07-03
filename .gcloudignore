@@ -1,0 +1,11 @@
+.git
+.gitignore
+
+__pycache__/
+app/system/model/*.bin
+app/system/model/*.kv
+app/system/model/*.npy
+.vscode/
+
+.env
+docker-compose.yml
