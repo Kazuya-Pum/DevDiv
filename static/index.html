@@ -26,9 +26,46 @@
         </div>
         <input type="button" value="送信する" id = "git_button">
     </form>
+        <!-- ローディング画面 -->
+        <div id="loading">
+          <div class="spinner"></div>
+        </div>
     <!-- Optional JavaScript -->
     <!-- <script src="./accept.js"></script> -->
     <p id = "output"></p>
+    <style type="text/css">
+        #loading {
+          width: 100vw;
+          height: 100vh;
+          transition: all 1s;
+          background-color: #0bd;
+          position: fixed;
+          top: 0;
+          left: 0;
+          z-index: 9999;
+          display: none;
+        }
+        .loaded {
+            display: none;
+        }
+        .spinner {
+          width: 100px;
+          height: 100px;
+          margin: 200px auto;
+          background-color: #fff;
+          border-radius: 100%;
+          animation: sk-scaleout 1.0s infinite ease-in-out;
+        }
+        /* ローディングアニメーション */
+        @keyframes sk-scaleout {
+          0% {
+            transform: scale(0);
+          } 100% {
+            transform: scale(1.0);
+            opacity: 0;
+          }
+        }
+    </style>
     <script>
         'use strict';
         
@@ -37,11 +74,15 @@
             const repo = document.getElementById('git_form').repo.value;
             const extension = document.getElementById('git_form').extension.value;
             document.getElementById('output').textContent = `「${owner}」，「${repo}」，「${extension}」`;
-/*             loading(true); */
+            document.getElementById('loading').style.display = 'inline'
             const res = await fetch('/divination', {
                 method: 'POST',
                 body: JSON.stringify({owner,repo,extension})
             });
+            document.getElementById('loading').style.display = 'none'
+        }
+        function loading(enabled) {
+        document.getElementById('loading').style.visibility = (enabled) ? "visible" : "hidden";
         }
     </script>
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
