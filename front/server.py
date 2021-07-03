@@ -10,7 +10,7 @@ def hello():
 
 @route('/hello', method='POST')
 def do_hello():
-	sleep(10)
+	# sleep(10)
 	input_text = request.forms.input_text
 	return template('index_template', text=input_text)
 
