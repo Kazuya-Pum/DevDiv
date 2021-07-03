@@ -66,6 +66,8 @@
           }
         }
     </style>
+    <br>
+    <p id = "output2"></p>
     <script>
         'use strict';
         
@@ -83,6 +85,9 @@
         }
         function loading(enabled) {
         document.getElementById('loading').style.visibility = (enabled) ? "visible" : "hidden";
+            const res_parse = await res.json();
+            console.log(res_parse);
+            document.getElementById('output2').textContent = `「${res_parse.res} ¥n ${res_parse.text}」`;
         }
     </script>
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

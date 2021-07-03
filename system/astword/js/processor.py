@@ -1,38 +1,38 @@
-from antlr4 import *
-if __name__ is not None and "." in __name__:
-    from .JavaScriptParser import JavaScriptParser
-    from .JavaScriptLexer import JavaScriptLexer
-    from .JavaScriptParserListener import JavaScriptParserListener
-else:
-    from JavaScriptParser import JavaScriptParser
-    from JavaScriptLexer import JavaScriptLexer
-    from JavaScriptParserListener import JavaScriptParserListener
+import esprima
+import os
 
 
-class WordListener(JavaScriptParserListener):
+class DeclaratorVisitor(esprima.NodeVisitor):
     def __init__(self):
         self.words = []
 
-    def enterVariableDeclaration(self, ctx:JavaScriptParser.VariableDeclarationContext):
-        self.words.append(ctx.getChild(0).getText())
+    # def visit_Identifier(self, node):
+    #     print(node)
+    #     self.generic_visit(node)
 
-    def enterArrowFunctionParameters(self, ctx:JavaScriptParser.ArrowFunctionParametersContext):
-        if ctx.getChildCount() > 2:
-            self.words.extend(ctx.getChild(1).getText().split(','))
+    # def visit_Property(self, node):
+    #     if node.key.name == None:
+    #         print(node)
+    #     self.words.append(node.key.name)
+    #     self.generic_visit(node)
 
-    def enterFunctionProperty(self, ctx:JavaScriptParser.FunctionPropertyContext):
-        if ctx.getChildCount() > 2:
-            self.words.extend(ctx.getChild(1).getText().split(','))
+    def visit_VariableDeclarator(self, node):
+        if node.id.type == 'Identifier':
+            self.words.append(node.id.name)
+        elif node.id.type == 'ObjectPattern':
+            for p in node.id.properties:
+                self.words.append(p.key.name)
+        self.generic_visit(node)
 
-    def enterFunctionDeclaration(self, ctx:JavaScriptParser.FunctionDeclarationContext):
-        self.words.append(ctx.getChild(1).getText())
-        
-
+    def visit_FunctionDeclaration(self, node):
+        self.words.append(node.id.name)
+        self.generic_visit(node)
 
 def get_words(filepath):
-    parser = JavaScriptParser(CommonTokenStream(JavaScriptLexer(FileStream(filepath, encoding="utf-8"))))
-    walker = ParseTreeWalker()
-    listener = WordListener()
-    walker.walk(listener, parser.program())
-
-    return listener.words
+    words = []
+    with open(filepath, 'r') as f:
+        program = f.read()
+        tree = esprima.parse(program)
+        visitor = DeclaratorVisitor()
+        visitor.visit(tree)
+        return visitor.words
