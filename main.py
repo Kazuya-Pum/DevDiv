@@ -1,5 +1,6 @@
 from system import system
 from bottle import Bottle, request, static_file
+import json
 
 app = Bottle()
 
@@ -14,9 +15,10 @@ def index(filename):
 
 @app.route('/divination', method='POST')
 def divination():
-	owner = request.forms.owner
-	repo = request.forms.repo
-	extension = request.forms.extension
+	body = json.load(request.body)
+	owner = body['owner']
+	repo = body['repo']
+	extension = body['extension']
 	return system.execute(owner, repo, extension)
 
 app.run(host='localhost', port='8080', debug=True)
