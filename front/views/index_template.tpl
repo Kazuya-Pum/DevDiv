@@ -24,7 +24,7 @@
               <option value = '.java'>.java</option>
             </select>
         </div>
-        <input type="submit" value="送信する">
+        <input type="button" value="送信する" id = "git_button">
     </form>
 
     送信されたユーザー名：{{owner}}
@@ -38,13 +38,18 @@
     <script>
         'use strict';
         
-        document.getElementById('git_form').onsubmit = function(event){
-            event.preventDefault();
+        document.getElementById('git_button').onclick = function(){
             const owner = document.getElementById('git_form').owner.value;
             const repo = document.getElementById('git_form').repo.value;
             const extension = document.getElementById('git_form').extension.value;
 
-            document.getElementById('output').textContent = `「${owner}」，「${repo}」，「${extension}」からとってきます！`;
+/*             loading(true); */
+/*             const res = await fetch('/divination', {
+                method: 'POST',
+                body: {owner,repo,extension}
+            });
+ */
+            document.getElementById('output').textContent = `「${owner}」，「${repo}」，「${extension}」`;
         }
     </script>
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

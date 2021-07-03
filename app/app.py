@@ -1,7 +1,6 @@
 from system import system
 from bottle import route, run, template, request
 
-
 @route('/divination', method='POST')
 def divination():
 	owner = request.forms.owner
