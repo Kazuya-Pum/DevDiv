@@ -5,6 +5,8 @@ import os
 import shutil
 import re
 from dotenv import load_dotenv
+import asyncio
+import itertools
 
 from .astword.js import processor as js
 from .astword.py import processor as py
@@ -70,11 +72,14 @@ def separate_words(words):
     return res
 
 
-def get_file_words(path, url, extension, save_path):
+async def get_file_words(path, url, extension, save_path):
     if path.endswith(extension) != True:
         return []
 
-    res = requests.get(url, headers=headers)
+    loop = asyncio.get_event_loop()
+
+    res = await loop.run_in_executor(None, lambda:requests.get(url, headers=headers))
+
     if res.ok == False:
         return []
     
@@ -84,11 +89,11 @@ def get_file_words(path, url, extension, save_path):
         with open(filepath, 'wb') as f:
             f.write(res.content)
         if extension == '.js':
-            return js.get_words(filepath)
+            return await loop.run_in_executor(None, js.get_words, filepath)
         elif extension == '.py':
-            return py.get_words(filepath)
+            return await loop.run_in_executor(None, py.get_words, filepath)
         elif extension == '.java':
-            return java.get_words(filepath)
+            return await loop.run_in_executor(None, java.get_words, filepath)
         else:
             raise Exception('Unknown extension')
     
@@ -107,10 +112,12 @@ def get_repo_words(owner, repo, extension):
         os.makedirs(save_path, exist_ok=True)
         urls = get_download_urls(owner, repo)
 
-        for path, url in urls.items():
-            words.extend(get_file_words(path, url, extension, save_path))
+        loop = asyncio.get_event_loop()
+        tasks = asyncio.gather(*[get_file_words(path, url, extension, save_path) for path, url in urls.items()])
 
-        return words
+        words = loop.run_until_complete(tasks)
+
+        return list(itertools.chain.from_iterable(words))
 
     finally:
         shutil.rmtree(save_path)
