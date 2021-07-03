@@ -16,22 +16,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const res = await fetch('/divination', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json'},
                 body: JSON.stringify({ owner, repo, extension })
             });
 
             const res_json = await res.json();
 
-
             document.getElementById('res').innerHTML = res_json.res;
 
-            $('.collapse').collapse()
+            $('#res-content').collapse()
 
-            loader(true);
+            loader(false);
 
-            console.log(res_json);
+            const wc_res = await fetch('/makeimage', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: res_json['text'] })
+            });
+            
+            const blob = await wc_res.blob()
 
-
+            $('#wordcloud').attr('src', (window.URL || window.webkitURL).createObjectURL(blob))
+            $('#wordcloud').collapse()
 
 
         } catch (e) {
