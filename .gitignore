@@ -128,10 +128,10 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-app/system/repos/
-app/system/model/*.bin
-app/system/model/*.kv
-app/system/model/*.npy
+system/repos/
+system/model/*.bin
+system/model/*.kv
+system/model/*.npy
 .vscode/
 
 env.yaml

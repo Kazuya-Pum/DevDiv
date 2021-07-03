@@ -2,10 +2,12 @@
 .gitignore
 
 __pycache__/
-app/system/model/*.bin
-app/system/model/*.kv
-app/system/model/*.npy
+system/model/*.bin
+system/model/*.kv
+system/model/*.npy
 .vscode/
+
+repos/
 
 .env
 docker-compose.yml
