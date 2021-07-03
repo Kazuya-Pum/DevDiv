@@ -39,3 +39,7 @@
     display: table-cell;
     vertical-align: middle;
 }
+.centering {
+    margin: 0 auto;
+    /* text-align: center; */
+}

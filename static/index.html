@@ -50,27 +50,25 @@
           >診断したいリポジトリを入れて下さい</span
         >
         <span id="formMain" class="d-block py-3 px-3 text-center dev-main">
-          <form method="POST" id="form">
+            <div class="row justify-content-center">
+          <form method="POST" id="form" class="form-inline">
             <div class="mb-3">
-              <label for="owner" class="form-label">オーナー名</label>
-              <input type="text" class="form-control" id="owner" />
-            </div>
-            <div class="mb-3">
-              <label for="repo" class="form-label">リポジトリ名</label>
-              <input type="text" class="form-control" id="repo" />
-            </div>
-            <div class="mb-3">
-              <label for="extension" class="form-label">拡張子</label>
+            https://github.com/
+              <input type="text" class="form-control" id="owner" placeholder='オーナー名'/>
+            /
+              <input type="text" class="form-control" id="repo" placeholder='リポジトリ名'/>
               <select
                 id="extension"
                 class="form-select form-control"
                 aria-label="Default select example"
               >
+                <option selected>拡張子</option>
                 <option value=".js">.js</option>
                 <option value=".py">.py</option>
                 <option value=".java">.java</option>
               </select>
             </div>
+          </div>
             <button
               id="submit"
               type="button"
@@ -79,6 +77,7 @@
               診断する
             </button>
           </form>
+          </div>
         </span>
       </div>
     </main>
