@@ -1,16 +1,12 @@
 import json
 import requests
-import time
 import os
-import shutil
 import re
 from dotenv import load_dotenv
-import asyncio
-import itertools
 
 from .astword.js import processor as js
 from .astword.py import processor as py
-from .astword.java import processor as java
+# from .astword.java import processor as java
 
 load_dotenv(verbose=True)
 load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'))
@@ -72,54 +68,36 @@ def separate_words(words):
     return res
 
 
-async def get_file_words(path, url, extension, save_path):
+def get_file_words(path, url, extension, save_path):
     if path.endswith(extension) != True:
         return []
 
-    loop = asyncio.get_event_loop()
-
-    res = await loop.run_in_executor(None, lambda:requests.get(url, headers=headers))
+    res = requests.get(url, headers=headers)
 
     if res.ok == False:
         return []
-    
-    filepath = os.path.join(save_path, path)
 
     try:
-        with open(filepath, 'wb') as f:
-            f.write(res.content)
         if extension == '.js':
-            return await loop.run_in_executor(None, js.get_words, filepath)
+            return js.get_words(res.text)
         elif extension == '.py':
-            return await loop.run_in_executor(None, py.get_words, filepath)
-        elif extension == '.java':
-            return await loop.run_in_executor(None, java.get_words, filepath)
+            return py.get_words(res.text)
+        # elif extension == '.java':
+        #     return java.get_words(res.text)
         else:
             raise Exception('Unknown extension')
     
     except Exception as e:
         print(e)
-    finally:
-        os.remove(filepath)
-        pass
 
 
 def get_repo_words(owner, repo, extension):
     save_path = os.path.join(os.path.dirname(__file__), 'repos', f'{owner}_{repo}')
     words = []
 
-    try:
-        os.makedirs(save_path, exist_ok=True)
-        urls = get_download_urls(owner, repo)
+    urls = get_download_urls(owner, repo)
 
-        loop = asyncio.get_event_loop()
-        tasks = asyncio.gather(*[get_file_words(path, url, extension, save_path) for path, url in urls.items()])
+    for path, url in urls.items():
+        words.extend(get_file_words(path, url, extension, save_path))
 
-        words = loop.run_until_complete(tasks)
-
-        return list(itertools.chain.from_iterable(words))
-
-    finally:
-        shutil.rmtree(save_path)
-        pass
-
+    return words

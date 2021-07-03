@@ -1,24 +1,20 @@
 from system import system
-from bottle import Bottle, request, static_file
-import json
+from flask import Flask, request
 
-app = Bottle()
+app = Flask(__name__)
+app.config['JSON_AS_ASCII'] = False
 
-@app.route('/')
-def index():
-	return static_file('index.html', './static')
-
-@app.route('/<filename>')
-def index(filename):
-	return static_file(filename, './static')
+# @app.route('/')
+# def index():
+# 	return app.send_static_file('index.html')
 
 
-@app.route('/divination', method='POST')
+@app.route('/divination', methods=['POST'])
 def divination():
-	body = json.load(request.body)
+	body = request.get_json()
 	owner = body['owner']
 	repo = body['repo']
 	extension = body['extension']
 	return system.execute(owner, repo, extension)
 
-app.run(host='localhost', port='8080', debug=True)
+# app.run()

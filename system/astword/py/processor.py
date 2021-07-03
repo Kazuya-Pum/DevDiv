@@ -1,5 +1,4 @@
 import ast
-import inspect
 
 class CollectVarname(ast.NodeTransformer):
     def __init__(self):
@@ -15,7 +14,5 @@ def collect_varname(node):
     return visitor.words
 
 
-def get_words(filepath):
-    with open(filepath, 'r') as rf:
-        program = ast.parse(rf.read())
-        return collect_varname(program)
+def get_words(program):
+    return collect_varname(ast.parse(program))

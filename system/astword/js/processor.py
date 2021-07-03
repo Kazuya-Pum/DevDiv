@@ -1,5 +1,4 @@
 import esprima
-import os
 
 
 class DeclaratorVisitor(esprima.NodeVisitor):
@@ -28,11 +27,8 @@ class DeclaratorVisitor(esprima.NodeVisitor):
         self.words.append(node.id.name)
         self.generic_visit(node)
 
-def get_words(filepath):
-    words = []
-    with open(filepath, 'r') as f:
-        program = f.read()
-        tree = esprima.parse(program)
-        visitor = DeclaratorVisitor()
-        visitor.visit(tree)
-        return visitor.words
+def get_words(program):
+    tree = esprima.parse(program)
+    visitor = DeclaratorVisitor()
+    visitor.visit(tree)
+    return visitor.words
