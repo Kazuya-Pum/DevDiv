@@ -1,221 +1,110 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
-    <head>
-        <meta charset="UTF-8">
-        <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/static/css/devdiv.css" />
+    <link rel="stylesheet" href="/static/css/loader.css" />
+    <title>開発者診断メーカー</title>
+    <meta name="description" content="リポジトリから開発者の書き方の癖を診断" />
+  </head>
 
-        <title>開発者診断メーカー</title>
-        <meta name="description" content="リポジトリから開発者の書き方の癖を診断">
-    </head>
-
-    <body>
-      <header class="header-6">
-        <div class="box box-logo">
-          <img class="logo-img" src="./DeVarLogo.png" />
+  <body>
+    <main class="container">
+      <div class="text-center mb-3 px-3">
+        <h1 class="mt-4 mb-4">
+          <img src="/static/DeVarLogo.png" />
+        </h1>
+        <div class="text-left">
+          変数名や関数名から開発者の性格を占います．自分と相性の良い開発者が見つかるかも？
         </div>
-      </header>
-      <form method="post" action="/hello" class="form-inline" id = "git_form">
-        <ul>
-            <li  class="owner">
-        <!-- 名前：<input type="text" placeholder="名前" name="input_text"> -->
-                <label for="owner">ユーザー名</label>
-                <input type="text" class="form-control" id="input_owner" name="owner" placeholder="ユーザー名">
-            </li>
-            <li class="repo">
-                <label for="repo">リポジトリ名</label>
-                <input type="text" class="form-control" id="input_repo" name="repo" placeholder="リポジトリ名">
-            </li>
-            <li class="extension">
-                <label for="extension">拡張子</label>
-                <select id="disabledSelect" class="form-select" name="extension">
-                <option value = '.js'>.js</option>
-                <option value = '.java'>.java</option>
-                </select>
-            </li>
-            <li>
-                <input type="button" value="診断開始！" id = "git_button">
-            </li>
-        </ul>
-    </form>
-    <!-- ローディング画面 -->
-        <div id="loading">
-          <div class="spinner"></div>
-        </div>
-    <!-- Optional JavaScript -->
-    <!-- <script src="./accept.js"></script> -->
-    <p id = "output"></p>
-    <br>
-    <p id = "output2"></p>
-    <style type="text/css">
-        #loading {
-          width: 100vw;
-          height: 100vh;
-          transition: all 1s;
-          background-color: #0bd;
-          position: fixed;
-          top: 0;
-          left: 0;
-          z-index: 9999;
-          display: none;
-        }
-        .loaded {
-            display: none;
-        }
-        .spinner {
-          width: 100px;
-          height: 100px;
-          margin: 200px auto;
-          background-color: #fff;
-          border-radius: 100%;
-          animation: sk-scaleout 1.0s infinite ease-in-out;
-        }
-        /* ローディングアニメーション */
-        @keyframes sk-scaleout {
-          0% {
-            transform: scale(0);
-          } 100% {
-            transform: scale(1.0);
-            opacity: 0;
-          }
-        }
-        ul li{
-          position: relative;
-          bottom:-20px;
-          list-style: none;
-        }
-        label {
-          margin-right: 10px;
-          width:100px;
-          float: left;
-        }
-        ul {
-          width: 500px;
-          margin: 0 auto;
-        }
-        input#git_button {
-          display: block;
-          margin: 0 auto;
-        }
-/*FontAwesomeを使用しています。*/
-        .header-6 {
-          box-sizing: border-box;
-          width: 100%;
-          height: 120px;
-        }
+      </div>
 
-        .box {
-          box-sizing: border-box;
-        }
+      <div id="res-content" class="px-3 mb-3 collapse">
+        <span
+          id="resultTitle"
+          class="h4 d-block text-center font-weight-bold py-3 px-2 mb-0 dev-title"
+          >診断結果</span
+        >
+        <span id="resultMain" class="d-block py-4 px-3 px-sm-4 text-center text-break dev-main">
+            <span id="res-height">
+                <span id="res-cell">
+                    <span id="res" class="text-left d-inline-block"></span>
+                </span>
+            </span>
+        </span>
+      </div>
 
-        /* ========== header ========== */
-        .box-logo {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background-color: #e5e9a9;
-          height: 100px;
-        }
+      <div class="px-3 mb-3">
+        <span
+          id="formTitle"
+          class="h4 d-block text-center font-weight-bold py-3 px-2 mb-0 dev-title"
+          >診断したいリポジトリを入れて下さい</span
+        >
+        <span id="formMain" class="d-block py-3 px-3 text-center dev-main">
+          <form method="POST" id="form">
+            <div class="mb-3">
+              <label for="owner" class="form-label">オーナー名</label>
+              <input type="text" class="form-control" id="owner" />
+            </div>
+            <div class="mb-3">
+              <label for="repo" class="form-label">リポジトリ名</label>
+              <input type="text" class="form-control" id="repo" />
+            </div>
+            <div class="mb-3">
+              <label for="extension" class="form-label">拡張子</label>
+              <select
+                id="extension"
+                class="form-select form-control"
+                aria-label="Default select example"
+              >
+                <option value=".js">.js</option>
+                <option value=".py">.py</option>
+                <option value=".java">.java</option>
+              </select>
+            </div>
+            <button
+              id="submit"
+              type="button"
+              class="btn btn-dev btn-block btn-lg"
+            >
+              診断する
+            </button>
+          </form>
+        </span>
+      </div>
+    </main>
 
-        .logo-img {
-          width: 400px;
-        }
+    <div id="loader" class="loader-container" style="visibility: hidden">
+      <div class="loader-back"></div>
+      <div class="loader">Loading...</div>
+    </div>
 
-        .sp-nav {
-          display: none;
-        }
-
-        .box-nav {
-          height: 40px;
-        }
-
-        /* ========== nav ========== */
-        .inner-nav {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 0;
-          margin: 0 auto;
-          list-style: none;
-        }
-
-        .menu {
-          padding: 0 4em;
-          cursor: pointer;
-        }
-
-        .menu:hover {
-          color: #00b5ad;
-        }
-
-        .en,
-        .jp {
-          margin: 0;
-          text-align: center;
-        }
-
-        .en {
-          font-size: 0.8em;
-          font-weight: bold;
-        }
-
-        .jp {
-          margin-top: 0.5em;
-          font-size: 0.5em;
-        }
-
-/* ========== Smart Phone ========== */
-@media screen and (max-width: 480px) {
-  .header-6 {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 60px;
-    padding: 0 0.8em;
-  }
-
-  .box-nav {
-    display: none;
-  }
-
-  .sp-nav {
-    display: block;
-  }
-
-  .box-logo {
-    height: 60px;
-  }
-
-  .logo-img {
-    width: 70px;
-  }
-}
-    </style>
-    <script>
-        'use strict';
-        
-        document.getElementById('git_button').onclick = async function(){
-            const owner = document.getElementById('git_form').owner.value;
-            const repo = document.getElementById('git_form').repo.value;
-            const extension = document.getElementById('git_form').extension.value;
-            document.getElementById('output').textContent = `「${owner}」，「${repo}」，「${extension}」`;
-            document.getElementById('loading').style.display = 'inline'
-            const res = await fetch('/divination', {
-                method: 'POST',
-                body: JSON.stringify({owner,repo,extension})
-            });
-            const res_parse = await res.json();
-            document.getElementById('loading').style.display = 'none'
-            console.log(res_parse);
-            document.getElementById('output2').textContent = `「${res_parse.res} ¥n ${res_parse.text}」`;
-        }
-    </script>
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <scrisspt src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    </body>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+    <script src="/static/js/devdiv.js"></script>
+  </body>
 
-    <!-- <textarea name="message"></textarea> -->
-
+  <!-- <textarea name="message"></textarea> -->
 </html>

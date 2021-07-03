@@ -1,0 +1,41 @@
+.banner {
+    background-image: url(/static/DeVarLogo.png)
+}
+
+.btn-dev {
+    background-color: #f68124;
+    border-color: #f68124;
+    color: rgba(78, 79, 78);
+}
+
+.btn-dev:hover {
+    background-color: rgba(246, 129, 36, 0.7);
+    border-color: rgba(246, 129, 36, 0.7);
+}
+
+.dev-title {
+    border: 1px solid rgba(78, 79, 78);;
+    background-color: rgba(78, 79, 78);;
+    border-radius: 12px 12px 0 0!important;
+    color: #fff;
+}
+
+.dev-main {
+    border: .5rem solid rgba(78, 79, 78);;
+    border-top: none;
+    background-color: #f8f8f8!important;
+    border-radius: 0 0 12px 12px!important;
+    color: #111!important;
+}
+
+#res-height {
+    display: table;
+    min-height: 280px;
+    width: 100%;
+    font-size: 2rem;
+}
+
+#res-cell {
+    display: table-cell;
+    vertical-align: middle;
+}

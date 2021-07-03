@@ -6,3 +6,4 @@ scipy
 google-cloud-datastore
 pandas
 flask
+wordcloud
