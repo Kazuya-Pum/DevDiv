@@ -6,6 +6,10 @@ import shutil
 import re
 from dotenv import load_dotenv
 
+from .astword.js import processor as js
+from .astword.py import processor as py
+from .astword.java import processor as java
+
 load_dotenv(verbose=True)
 load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'))
 access_token = os.environ.get('TOKEN')
@@ -80,14 +84,13 @@ def get_file_words(path, url, extension, save_path):
         with open(filepath, 'wb') as f:
             f.write(res.content)
         if extension == '.js':
-            from .astword.js.processor import get_words
+            return js.get_words(filepath)
         elif extension == '.py':
-            from .astword.py.processor import get_words
+            return py.get_words(filepath)
         elif extension == '.java':
-            from .astword.java.processor import get_words
-
-        words = get_words(filepath)
-        return words
+            return java.get_words(filepath)
+        else:
+            raise Exception('Unknown extension')
     
     except Exception as e:
         print(e)
