@@ -10,21 +10,33 @@
     </head>
 
     <body>
-        <form method="post" action="/hello" class="form-inline" id = "git_form">
+      <header class="header-6">
+        <div class="box box-logo">
+          <img class="logo-img" src="./DeVarLogo.png" />
+        </div>
+      </header>
+      <form method="post" action="/hello" class="form-inline" id = "git_form">
+        <ul>
+            <li  class="owner">
         <!-- 名前：<input type="text" placeholder="名前" name="input_text"> -->
-        <div class="form-group">
-            <label for="exampleInputEmail1">リポジトリ名<br></label>
-            <input type="text" class="form-control" id="input_owner" name="owner" placeholder="ユーザー名">
-            <input type="text" class="form-control" id="input_repo" name="repo" placeholder="リポジトリ名">
-        </div>
-        <div class="form-group">
-            <label for="disabledSelect" class="form-label"></label>
-            <select id="disabledSelect" class="form-select" name="extension">
-              <option value = '.js'>.js</option>
-              <option value = '.java'>.java</option>
-            </select>
-        </div>
-        <input type="button" value="送信する" id = "git_button">
+                <label for="owner">ユーザー名</label>
+                <input type="text" class="form-control" id="input_owner" name="owner" placeholder="ユーザー名">
+            </li>
+            <li class="repo">
+                <label for="repo">リポジトリ名</label>
+                <input type="text" class="form-control" id="input_repo" name="repo" placeholder="リポジトリ名">
+            </li>
+            <li class="extension">
+                <label for="extension">拡張子</label>
+                <select id="disabledSelect" class="form-select" name="extension">
+                <option value = '.js'>.js</option>
+                <option value = '.java'>.java</option>
+                </select>
+            </li>
+            <li>
+                <input type="button" value="診断開始！" id = "git_button">
+            </li>
+        </ul>
     </form>
     <!-- ローディング画面 -->
         <div id="loading">
@@ -67,6 +79,117 @@
             opacity: 0;
           }
         }
+        ul li{
+          position: relative;
+          bottom:-20px;
+          list-style: none;
+        }
+        label {
+          margin-right: 10px;
+          width:100px;
+          float: left;
+        }
+        ul {
+          width: 500px;
+          margin: 0 auto;
+        }
+        input#git_button {
+          display: block;
+          margin: 0 auto;
+        }
+/*FontAwesomeを使用しています。*/
+        .header-6 {
+          box-sizing: border-box;
+          width: 100%;
+          height: 120px;
+        }
+
+        .box {
+          box-sizing: border-box;
+        }
+
+        /* ========== header ========== */
+        .box-logo {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: #e5e9a9;
+          height: 100px;
+        }
+
+        .logo-img {
+          width: 400px;
+        }
+
+        .sp-nav {
+          display: none;
+        }
+
+        .box-nav {
+          height: 40px;
+        }
+
+        /* ========== nav ========== */
+        .inner-nav {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0;
+          margin: 0 auto;
+          list-style: none;
+        }
+
+        .menu {
+          padding: 0 4em;
+          cursor: pointer;
+        }
+
+        .menu:hover {
+          color: #00b5ad;
+        }
+
+        .en,
+        .jp {
+          margin: 0;
+          text-align: center;
+        }
+
+        .en {
+          font-size: 0.8em;
+          font-weight: bold;
+        }
+
+        .jp {
+          margin-top: 0.5em;
+          font-size: 0.5em;
+        }
+
+/* ========== Smart Phone ========== */
+@media screen and (max-width: 480px) {
+  .header-6 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    padding: 0 0.8em;
+  }
+
+  .box-nav {
+    display: none;
+  }
+
+  .sp-nav {
+    display: block;
+  }
+
+  .box-logo {
+    height: 60px;
+  }
+
+  .logo-img {
+    width: 70px;
+  }
+}
     </style>
     <script>
         'use strict';
