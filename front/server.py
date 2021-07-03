@@ -6,7 +6,7 @@ from time import sleep
 def hello():
 	now = datetime.now()
 	# return template('Hello World! {{now}}', now=now)
-	return template('front/views/index_template.tpl', owner='',repo='',extension='')
+	return template('views/index_template.tpl', owner='',repo='',extension='')
 
 @route('/hello', method='POST')
 def do_hello():
@@ -14,6 +14,6 @@ def do_hello():
 	input_owner = request.forms.owner
 	input_repo = request.forms.repo
 	input_extension = request.forms.extension
-	return template('front/views/index_template.tpl', owner=input_owner,repo=input_repo,extension=input_extension)
+	return template('views/index_template.tpl', owner=input_owner,repo=input_repo,extension=input_extension)
 
 run(host='localhost', port='8080', debug=True)

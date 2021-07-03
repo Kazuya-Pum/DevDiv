@@ -10,7 +10,7 @@
     </head>
 
     <body>
-        <form method="post" action="/hello" class="form-inline">
+        <form method="post" action="/hello" class="form-inline" id = "git_form">
         <!-- 名前：<input type="text" placeholder="名前" name="input_text"> -->
         <div class="form-group">
             <label for="exampleInputEmail1">リポジトリ名<br></label>
@@ -24,7 +24,7 @@
               <option value = '.java'>.java</option>
             </select>
         </div>
-        <input type="submit" value="送信する">
+        <input type="button" value="送信する" id = "git_button">
     </form>
 
     送信されたユーザー名：{{owner}}
@@ -33,6 +33,25 @@
     <br>
     送信された拡張子：{{extension}}
     <!-- Optional JavaScript -->
+    <!-- <script src="./accept.js"></script> -->
+    <p id = "output"></p>
+    <script>
+        'use strict';
+        
+        document.getElementById('git_button').onclick = function(){
+            const owner = document.getElementById('git_form').owner.value;
+            const repo = document.getElementById('git_form').repo.value;
+            const extension = document.getElementById('git_form').extension.value;
+
+/*             loading(true); */
+/*             const res = await fetch('/divination', {
+                method: 'POST',
+                body: {owner,repo,extension}
+            });
+ */
+            document.getElementById('output').textContent = `「${owner}」，「${repo}」，「${extension}」`;
+        }
+    </script>
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
