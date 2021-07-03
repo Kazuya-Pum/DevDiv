@@ -71,11 +71,11 @@ def get_file_words(path, url, extension, save_path):
         with open(filepath, 'wb') as f:
             f.write(res.content)
         if extension == '.js':
-            from astword.js.processor import get_words
+            from .astword.js.processor import get_words
         elif extension == '.py':
-            from astword.py.processor import get_words
+            from .astword.py.processor import get_words
         elif extension == '.java':
-            from astword.java.processor import get_words
+            from .astword.java.processor import get_words
 
         words = get_words(filepath)
         return words
