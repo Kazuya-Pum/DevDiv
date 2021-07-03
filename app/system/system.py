@@ -1,14 +1,12 @@
-from .github import *
+from .github import Repository
 from .vector import *
 from scipy.spatial import distance
 
 
-def get_repo_vector(owner, repo, extension):
-    words = get_repo_words(owner, repo, extension)
-    repo_vec = get_average_vector(words)
-
-    return repo_vec
-
-
 def vector_similarity(vector1, vector2):
     return 1 - distance.cosine(vector1, vector2)
+
+
+def execute(owner, repo, extension):
+    repository = Repository(owner, repo, extension)
+    return get_average_vector(repository.words)
