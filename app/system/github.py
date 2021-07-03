@@ -6,10 +6,23 @@ import shutil
 import re
 from dotenv import load_dotenv
 
+from .astword.js import processor as js
+from .astword.py import processor as py
+from .astword.java import processor as java
+
 load_dotenv(verbose=True)
 load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'))
 access_token = os.environ.get('TOKEN')
 headers = {'Authorization': f'token {access_token}'} if access_token != None else None
+
+
+class Repository():
+    def __init__(self, owner, repo, extension):
+        self.owner = owner
+        self.repo = repo
+        self.extension = extension
+        self.raw_words = get_repo_words(owner, repo, extension)
+        self.words = separate_words(self.raw_words)
 
 
 def get_sha(owner, repo):
@@ -71,14 +84,13 @@ def get_file_words(path, url, extension, save_path):
         with open(filepath, 'wb') as f:
             f.write(res.content)
         if extension == '.js':
-            from .astword.js.processor import get_words
+            return js.get_words(filepath)
         elif extension == '.py':
-            from .astword.py.processor import get_words
+            return py.get_words(filepath)
         elif extension == '.java':
-            from .astword.java.processor import get_words
-
-        words = get_words(filepath)
-        return words
+            return java.get_words(filepath)
+        else:
+            raise Exception('Unknown extension')
     
     except Exception as e:
         print(e)
@@ -98,7 +110,7 @@ def get_repo_words(owner, repo, extension):
         for path, url in urls.items():
             words.extend(get_file_words(path, url, extension, save_path))
 
-        return separate_words(words)
+        return words
 
     finally:
         shutil.rmtree(save_path)

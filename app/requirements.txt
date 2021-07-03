@@ -7,3 +7,4 @@ numpy
 scipy
 google-cloud-datastore
 antlr4-python3-runtime
+pandas
