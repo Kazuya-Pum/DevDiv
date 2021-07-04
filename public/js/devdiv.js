@@ -13,28 +13,29 @@ document.addEventListener("DOMContentLoaded", () => {
             const repo = document.getElementById('repo').value;
             const extension = document.getElementById('extension').value;
 
-
-            const res = await fetch('/divination', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json'},
-                body: JSON.stringify({ owner, repo, extension })
-            });
-
-            const res_json = await res.json();
-
-            document.getElementById('res').innerHTML = res_json.res;
-
-            $('#res-content').collapse()
-
+            const functions = firebase.app().functions('asia-northeast1');
+            const res = await functions.httpsCallable('divination')({ owner, repo, extension });
+            document.getElementById('res').innerHTML = res.data.res;
+            $('#res-content').collapse();
             loader(false);
 
-            const wc_res = await fetch('/makeimage', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text: res_json['text'] })
-            });
-            
-            const blob = await wc_res.blob()
+
+            // const res = await fetch('/divination', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify({ owner, repo, extension })
+            // });
+
+            // const res_json = await res.json();
+
+            // document.getElementById('res').innerHTML = res_json.res;
+
+            // $('#res-content').collapse()
+
+            // loader(false);
+
+            const wc_res = await functions.httpsCallable('divination')({ text: res_json['text'] });
+            const blob = wc_res.data.blob()
 
             $('#wordcloud').attr('src', (window.URL || window.webkitURL).createObjectURL(blob))
             $('#wordcloud').collapse()

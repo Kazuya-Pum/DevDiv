@@ -5,7 +5,7 @@ import json
 from io import BytesIO
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='public', static_url_path='/')
 app.config['JSON_AS_ASCII'] = False
 
 @app.route('/')
@@ -15,7 +15,16 @@ def index():
 
 @app.route('/divination', methods=['POST'])
 def divination():
-	body = json.loads(request.get_data())
+	if request.method == 'OPTIONS':
+		headers = {
+			'Access-Control-Allow-Origin': '*',
+			'Access-Control-Allow-Methods': 'POST',
+			'Access-Control-Allow-Headers': 'Content-Type',
+			'Access-Control-Max-Age': '3600',
+		}
+		return ('', 204, headers)
+
+	body = request.get_json()
 	owner = body['owner']
 	repo = body['repo']
 	extension = body['extension']

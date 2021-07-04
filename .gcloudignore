@@ -11,3 +11,9 @@ repos/
 
 .env
 docker-compose.yml
+
+static/
+*.yaml
+*.md
+system/vector.py
+system/model/
