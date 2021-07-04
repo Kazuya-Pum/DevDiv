@@ -26,8 +26,8 @@ class WordListener(JavaParserListener):
         self.words.append(ctx.getChild(1).getText())
 
 
-def get_words(filepath):
-    parser = JavaParser(CommonTokenStream(JavaLexer(FileStream(filepath, encoding="utf-8"))))
+def get_words(program):
+    parser = JavaParser(CommonTokenStream(JavaLexer(InputStream(program))))
     walker = ParseTreeWalker()
     listener = WordListener()
     walker.walk(listener, parser.compilationUnit())

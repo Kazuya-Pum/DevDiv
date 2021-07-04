@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 from .astword.js import processor as js
 from .astword.py import processor as py
-# from .astword.java import processor as java
+from .astword.java import processor as java
 
 load_dotenv(verbose=True)
 load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'))
@@ -82,8 +82,8 @@ def get_file_words(path, url, extension, save_path):
             return js.get_words(res.text)
         elif extension == '.py':
             return py.get_words(res.text)
-        # elif extension == '.java':
-        #     return java.get_words(res.text)
+        elif extension == '.java':
+            return java.get_words(res.text)
         else:
             raise Exception('Unknown extension')
     
